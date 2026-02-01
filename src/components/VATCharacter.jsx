@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useGLTF, useTexture } from '@react-three/drei'
+import { useFBX, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { VATMaterial } from './VATMaterial'
 
@@ -12,17 +12,22 @@ const ANIMATIONS = {
 }
 
 export default function VATCharacter({ position, animationState = 'walk' }) {
-    // 1. Change the file extension to .gltf
-    const { nodes } = useGLTF('/assets/Character.gltf')
+    // 1. Load the FBX model
+    const fbx = useFBX('/assets/Character.fbx')
 
-    // 2. Keep the "Robust Finder" (Best for lazy/safe loading)
-    // This works regardless of whether the internal name is "Character_vat" or "Object_0"
-    const character = Object.values(nodes).find((node) => node.isMesh)
+    // 2. Keep the "Robust Finder"
+    // FBX loads as a Group, so we need to traverse or searching children for the mesh
+    let character = null
+    fbx.traverse((child) => {
+        if (child.isMesh && !character) {
+            character = child
+        }
+    })
 
-    // Safety Check: If it's still failing, log what we found
+    // Safety Check
     if (!character) {
-        console.error("Could not find any mesh! Loaded nodes:", Object.keys(nodes))
-        return null // Stop rendering to prevent the crash
+        console.error("Could not find any mesh in FBX!")
+        return null
     }
 
     // ... rest of your code (useTexture, useMemo, etc.)
