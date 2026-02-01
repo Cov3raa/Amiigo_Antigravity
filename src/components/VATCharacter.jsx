@@ -16,7 +16,7 @@ export default function VATCharacter({ position, animationState = 'walk' }) {
     const fbx = useFBX('/assets/Character.fbx')
 
     // 2. Keep the "Robust Finder"
-    // FBX loads as a Group, so we need to traverse or searching children for the mesh
+    // useFBX returns the Group/Scene directly
     let character = null
     fbx.traverse((child) => {
         if (child.isMesh && !character) {
@@ -30,7 +30,7 @@ export default function VATCharacter({ position, animationState = 'walk' }) {
         return null
     }
 
-    // ... rest of your code (useTexture, useMemo, etc.)
+
 
     // 3. Load PNG Textures
     // Make sure these files exist in public/assets/

@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useState, useMemo } from 'react'
+import React, { Suspense, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stage } from '@react-three/drei'
 import VATCharacter from './components/VATCharacter'
@@ -31,7 +31,7 @@ function App() {
                 </Suspense>
                 <OrbitControls makeDefault />
             </Canvas>
-        </div>
+        </div >
     )
 }
 
